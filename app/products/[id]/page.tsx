@@ -7,18 +7,20 @@ import { Product } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { PageProps } from "next";  // ✅ Ensure correct type usage
 
-interface Props {
-  params: { id: string };
-}
+const ProductDetails = async ({ params }: PageProps) => {
+  const id = params?.id as string; // ✅ Ensure `id` is properly extracted
 
-const ProductDetails = async ({ params }: Props) => {
-  const { id } = params;
+  if (!id) {
+    redirect("/");
+    return null;
+  }
 
   const product: Product | null = await getProductById(id);
   if (!product) {
     redirect("/");
-    return null; // Avoid rendering if redirected
+    return null;
   }
 
   const similarProducts = await getSimilarProducts(id);
