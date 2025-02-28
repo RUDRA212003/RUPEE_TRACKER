@@ -7,10 +7,13 @@ import { Product } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { PageProps } from "next";  // ✅ Ensure correct type usage
 
-const ProductDetails = async ({ params }: PageProps) => {
-  const id = params?.id as string; // ✅ Ensure `id` is properly extracted
+interface Props {
+  params: { id: string };  // ✅ Correctly define `params`
+}
+
+const ProductDetails = async ({ params }: Props) => {
+  const id = params.id;  // ✅ Ensure proper extraction of `id`
 
   if (!id) {
     redirect("/");
