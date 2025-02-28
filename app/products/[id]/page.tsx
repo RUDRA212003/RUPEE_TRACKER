@@ -9,7 +9,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 interface Props {
-  params: { id: string };  // ✅ Correctly define `params`
+  params: { id: string };  // ✅ Correctly define `params
 }
 
 const ProductDetails = async ({ params }: Props) => {
