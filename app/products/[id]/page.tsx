@@ -8,24 +8,23 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-type Props = {
+interface Props {
   params: { id: string };
-};
+}
 
 const ProductDetails = async ({ params }: Props) => {
-  const id = params?.id;
-  if (!id) return redirect("/");
-  
-  const product: Product | null = await getProductById(id);
+  if (!params || !params.id) return redirect("/");
+
+  const product: Product | null = await getProductById(params.id);
   if (!product) return redirect("/");
 
-  const similarProducts = await getSimilarProducts(id);
+  const similarProducts = await getSimilarProducts(params.id);
 
   return (
     <div className="product-container">
       <div className="flex gap-28 xl:flex-row flex-col">
         <div className="product-image">
-          <Image 
+          <Image
             src={product.image}
             alt={product.title}
             width={580}
@@ -49,12 +48,23 @@ const ProductDetails = async ({ params }: Props) => {
               </Link>
             </div>
           </div>
-          <Modal productId={id} />
+
+          <div className="product-info">
+            <div className="flex flex-col gap-2">
+              <p className="text-[34px] text-secondary font-bold">
+                {product.currency} {formatNumber(product.currentPrice)}
+              </p>
+            </div>
+          </div>
+
+          <Modal productId={params.id} />
         </div>
       </div>
+
       {similarProducts && similarProducts.length > 0 && (
         <div className="py-14 flex flex-col gap-2 w-full">
           <p className="section-text">Similar Products</p>
+
           <div className="flex flex-wrap gap-10 mt-7 w-full">
             {similarProducts.map((product) => (
               <ProductCard key={product._id} product={product} />
